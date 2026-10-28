@@ -89,7 +89,8 @@ footer p { margin: 0; }
 .badge.ok { background: var(--cool-bg); color: var(--cool); }
 .badge.no { background: var(--warm-bg); color: var(--warm); }
 .why { margin: 0; padding-left: 18px; font-size: 13px; color: var(--warm); }
-.nums.six { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.nums.six { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.lowconf { color: var(--warm); font-weight: 600; }
 .num.pay .v { color: var(--cool); }
 tr.ask td { color: var(--muted); font-style: italic; }
 .check { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--label); border-radius: 6px; padding: 12px 16px; font-size: 13.5px; }
@@ -106,7 +107,7 @@ tr.ask td { color: var(--muted); font-style: italic; }
   </header>
 
   <section class="how" aria-label="What Solid means">
-    <div><b>Card Ladder sales</b>Every sale comes from Card Ladder (eBay, Fanatics, Alt, Goldin and more), matched on the slab's own label and grade. Best Offers show the price actually accepted, not the ask.</div>
+    <div><b>Card Ladder numbers</b>Every sale comes from Card Ladder (eBay, Fanatics, Alt, Goldin and more), matched on the slab's own label and grade. Best Offers show the price actually accepted, not the ask. <b>Card Ladder price</b> is the average of the card's last 3 sales; <b>CL Value</b> is Card Ladder's own estimate, which can sit far from recent sales when it has little to go on (look at its confidence).</div>
     <div><b>Fees on both sides</b>Alt and Fanatics add a 20% buyer's fee and Goldin 22%, and their sale prices include it. So each bid is shown all-in before it's compared. eBay has no buyer's fee.</div>
     <div><b>Worst-case buy price</b>Assumes the dealer at the show asks the highest of the last 3 confirmed sales. Resale assumes the next dealer pays 85% of where this auction already sits.</div>
     <div><b>Solid needs all of</b>At least 3 real sales in 90 days, from 2+ sites (or 5+ sales), the latest within 45 days, a gap between +20% and +100%, and at least 10% profit at the worst-case price.</div>
@@ -176,6 +177,7 @@ function render() {
           <div class="nums six">
             <div class="num"><span class="k">Bid all-in</span><span class="v">${fmt(r.allIn)}</span><span class="n">${r.fee ? fmt(r.bid) + ' + ' + Math.round(r.fee * 100) + '% fee' : 'no buyer fee'}</span></div>
             <div class="num"><span class="k">Card Ladder price</span><span class="v">${fmt(r.clPrice)}</span><span class="n">${r.clPrice ? 'C$' + Math.round(r.clPrice * DATA.fx).toLocaleString('en-US') + ' · avg of last ' + r.clN : 'no Card Ladder sales found'}${r.lastConf ? '<br>last ' + fmt(r.lastConf.price) + ' · ' + r.lastConf.date + ' · ' + r.lastConf.house : ''}</span></div>
+            <div class="num"><span class="k">CL Value</span><span class="v">${fmt(r.clv?.value)}</span><span class="n">${r.clv ? 'confidence ' + r.clv.confidence + '/5 · ' + (r.clv.m1?.velocity ? r.clv.m1.velocity + ' sale' + (r.clv.m1.velocity === 1 ? '' : 's') + ' in the last month' : '<b class="lowconf">no sales in the last month: an estimate</b>') : 'not available'}</span></div>
             <div class="num"><span class="k">Dealer likely asks</span><span class="v">${fmt(r.dealerAsk)}</span><span class="n">top of last ${Math.min(3, r.confirmedCount)} confirmed</span></div>
             <div class="num"><span class="k">You resell for</span><span class="v">${fmt(r.resell)}</span><span class="n">85% of bid all-in, at least</span></div>
             <div class="num pay"><span class="k">Pay at most</span><span class="v">${fmt(r.payMax)}</span><span class="n">keeps a 10% cushion</span></div>
