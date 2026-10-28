@@ -1,0 +1,8 @@
+{
+  "name": "show-hit-list",
+  "private": true,
+  "type": "module",
+  "description": "Private page: live auctions priced above recent sales, for card shows.",
+  "scripts": { "build": "node src/build.mjs", "start": "node server.mjs" },
+  "engines": { "node": ">=20" }
+}
