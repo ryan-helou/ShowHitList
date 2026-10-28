@@ -107,10 +107,10 @@ tr.ask td { color: var(--muted); font-style: italic; }
   </header>
 
   <section class="how" aria-label="What Solid means">
-    <div><b>Card Ladder numbers</b>Every sale comes from Card Ladder (eBay, Fanatics, Alt, Goldin and more), matched on the slab's own label and grade. Best Offers show the price actually accepted, not the ask. <b>Card Ladder price</b> is the average of the card's last 3 sales; <b>CL Value</b> is Card Ladder's own estimate, which can sit far from recent sales when it has little to go on (look at its confidence).</div>
+    <div><b>Card Ladder numbers</b>Every sale comes from Card Ladder (eBay, Fanatics, Alt, Goldin and more), matched on the slab's own label and grade. Best Offers show the price actually accepted, not the ask. <b>CL Value</b> is Card Ladder's own number and the one a dealer will quote, so every gap on this page is measured against it. <b>Recent sales avg</b> (the last 3 sales) is shown beside it as a cross-check.</div>
     <div><b>Fees on both sides</b>Alt and Fanatics add a 20% buyer's fee and Goldin 22%, and their sale prices include it. So each bid is shown all-in before it's compared. eBay has no buyer's fee.</div>
-    <div><b>Worst-case buy price</b>Assumes the dealer at the show asks the highest of the last 3 confirmed sales. Resale assumes the next dealer pays 85% of where this auction already sits.</div>
-    <div><b>Solid needs all of</b>At least 3 real sales in 90 days, from 2+ sites (or 5+ sales), the latest within 45 days, a gap between +20% and +100%, and at least 10% profit at the worst-case price.</div>
+    <div><b>Worst-case buy price</b>Assumes the dealer at the show asks the higher of CL Value and the highest of the last 3 confirmed sales. Resale assumes the next dealer pays 85% of where this auction already sits.</div>
+    <div><b>Solid needs all of</b>At least 3 real sales in 90 days, from 2+ sites (or 5+ sales), the latest within 45 days, a CL Value with confidence 3/5 or better, a bid +20% to +100% above CL Value, and at least 10% profit at the worst-case price.</div>
   </section>
 
   <section class="check">
@@ -137,8 +137,10 @@ tr.ask td { color: var(--muted); font-style: italic; }
     <label class="budget" for="budget">Budget
       <select id="budget">
         <option value="0">Any price</option>
-        <option value="2000">Pay at most under $2,000</option>
+        <option value="1000">Pay at most under $1,000</option>
+        <option value="2000">Under $2,000</option>
         <option value="5000">Under $5,000</option>
+        <option value="6000">Under $6,000</option>
         <option value="10000">Under $10,000</option>
       </select>
     </label>
@@ -169,16 +171,16 @@ function render() {
     const g = r.gap, tone = !r.solid ? 't-cool' : g >= 0.5 ? 't-hot' : 't-warm';
     return `<article class="card ${tone}">
       <div class="top">
-        <div class="gap"><div class="pct">${g == null ? '—' : (g >= 0 ? '+' : '−') + Math.abs(Math.round(g * 100)) + '%'}</div><div class="vs">all-in bid vs sales</div></div>
+        <div class="gap"><div class="pct">${g == null ? '—' : (g >= 0 ? '+' : '−') + Math.abs(Math.round(g * 100)) + '%'}</div><div class="vs">all-in bid vs CL Value</div></div>
         <div class="main">
           <div class="title"><h2>${short(r.name)}</h2><span class="grade">${r.grade}</span>${r.solid ? '<span class="badge ok">Solid</span>' : '<span class="badge no">Needs check</span>'}</div>
           <div class="sub">${year(r.name)} · <span class="site ${r.site}">${r.site}</span> · ${r.bids} bids · ${endsText(r.ends)}</div>
           ${r.why.length ? `<ul class="why">${r.why.map(w => `<li>${w}</li>`).join('')}</ul>` : ''}
           <div class="nums six">
             <div class="num"><span class="k">Bid all-in</span><span class="v">${fmt(r.allIn)}</span><span class="n">${r.fee ? fmt(r.bid) + ' + ' + Math.round(r.fee * 100) + '% fee' : 'no buyer fee'}</span></div>
-            <div class="num"><span class="k">Card Ladder price</span><span class="v">${fmt(r.clPrice)}</span><span class="n">${r.clPrice ? 'C$' + Math.round(r.clPrice * DATA.fx).toLocaleString('en-US') + ' · avg of last ' + r.clN : 'no Card Ladder sales found'}${r.lastConf ? '<br>last ' + fmt(r.lastConf.price) + ' · ' + r.lastConf.date + ' · ' + r.lastConf.house : ''}</span></div>
-            <div class="num"><span class="k">CL Value</span><span class="v">${fmt(r.clv?.value)}</span><span class="n">${r.clv ? 'confidence ' + r.clv.confidence + '/5 · ' + (r.clv.m1?.velocity ? r.clv.m1.velocity + ' sale' + (r.clv.m1.velocity === 1 ? '' : 's') + ' in the last month' : '<b class="lowconf">no sales in the last month: an estimate</b>') : 'not available'}</span></div>
-            <div class="num"><span class="k">Dealer likely asks</span><span class="v">${fmt(r.dealerAsk)}</span><span class="n">top of last ${Math.min(3, r.confirmedCount)} confirmed</span></div>
+            <div class="num"><span class="k">CL Value · what dealers see</span><span class="v">${fmt(r.clv?.value)}</span><span class="n">${r.clv ? 'confidence ' + r.clv.confidence + '/5 · ' + (r.clv.m1?.velocity ? r.clv.m1.velocity + ' sale' + (r.clv.m1.velocity === 1 ? '' : 's') + ' in the last month' : '<b class="lowconf">no sales in the last month: an estimate</b>') : 'not available'}</span></div>
+            <div class="num"><span class="k">Recent sales avg</span><span class="v">${fmt(r.clPrice)}</span><span class="n">${r.clPrice ? 'C$' + Math.round(r.clPrice * DATA.fx).toLocaleString('en-US') + ' · avg of last ' + r.clN : 'no Card Ladder sales found'}${r.lastConf ? '<br>last ' + fmt(r.lastConf.price) + ' · ' + r.lastConf.date + ' · ' + r.lastConf.house : ''}</span></div>
+            <div class="num"><span class="k">Dealer likely asks</span><span class="v">${fmt(r.dealerAsk)}</span><span class="n">higher of CL Value and top recent sale</span></div>
             <div class="num"><span class="k">You resell for</span><span class="v">${fmt(r.resell)}</span><span class="n">85% of bid all-in, at least</span></div>
             <div class="num pay"><span class="k">Pay at most</span><span class="v">${fmt(r.payMax)}</span><span class="n">keeps a 10% cushion</span></div>
             <div class="num"><span class="k">Profit at dealer ask</span><span class="v">${fmt(r.profit)}</span><span class="n">${r.confirmedCount} confirmed · ${r.sites.join(', ')}</span></div>
