@@ -1,0 +1,203 @@
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a slab-label ledger — one row per card, the gap as the loudest number, sales tucked under each row */
+:root {
+  --bg: #f3f4f1; --surface: #ffffff; --ink: #1b1f1d; --muted: #5d6661; --line: #d9ddd7;
+  --label: #c8102e; --hot: #b4410f; --hot-bg: #fbe9df; --warm: #8a5a00; --warm-bg: #f8efd9; --cool: #2f5d50; --cool-bg: #e3efe9;
+  --alt: #3b3bd1; --fan: #0b6e4f;
+  --display: "Archivo Narrow", "Arial Narrow", system-ui, sans-serif;
+  --body: "Public Sans", system-ui, -apple-system, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121513; --surface: #1a1e1c; --ink: #e8ebe8; --muted: #9aa49e; --line: #2c322f;
+  --label: #ff5a6e; --hot: #ff9a66; --hot-bg: #3a2216; --warm: #e8c06a; --warm-bg: #33290f; --cool: #8fd1bb; --cool-bg: #16302a;
+  --alt: #a3a3ff; --fan: #5fd3a6; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #121513; --surface: #1a1e1c; --ink: #e8ebe8; --muted: #9aa49e; --line: #2c322f;
+  --label: #ff5a6e; --hot: #ff9a66; --hot-bg: #3a2216; --warm: #e8c06a; --warm-bg: #33290f; --cool: #8fd1bb; --cool-bg: #16302a;
+  --alt: #a3a3ff; --fan: #5fd3a6; color-scheme: dark }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5; }
+.wrap { max-width: 1040px; margin: 0 auto; padding-block: 28px 56px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 22px; }
+header { display: grid; gap: 8px; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--label); }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(32px, 6vw, 48px); line-height: 1; margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+.lede { color: var(--muted); max-width: 68ch; margin: 0; }
+.how { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+.how div { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; font-size: 13.5px; color: var(--muted); }
+.how b { display: block; color: var(--ink); font-family: var(--display); font-size: 16px; font-weight: 600; margin-bottom: 2px; }
+.controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; background: var(--surface); }
+.seg button { font: 600 13px var(--body); color: var(--muted); background: none; border: 0; padding: 7px 14px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.seg button:focus-visible, select:focus-visible, summary:focus-visible, a:focus-visible { outline: 2px solid var(--label); outline-offset: 2px; }
+label.budget { font-size: 13px; color: var(--muted); display: inline-flex; gap: 6px; align-items: center; }
+select { font: 500 13px var(--body); color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 6px 10px; }
+.count { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-left: auto; }
+.list { display: grid; gap: 10px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.top { display: grid; grid-template-columns: 92px 1fr; gap: 0; }
+.gap { display: grid; place-content: center; text-align: center; padding: 12px 6px; border-right: 1px solid var(--line); }
+.gap .pct { font-family: var(--display); font-weight: 700; font-size: 30px; line-height: 1; font-variant-numeric: tabular-nums; }
+.gap .vs { font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; margin-top: 4px; }
+.t-hot .gap { background: var(--hot-bg); color: var(--hot); }
+.t-warm .gap { background: var(--warm-bg); color: var(--warm); }
+.t-cool .gap { background: var(--cool-bg); color: var(--cool); }
+.main { padding: 12px 16px; display: grid; gap: 10px; min-width: 0; }
+.title { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: baseline; }
+.title h2 { font-family: var(--display); font-weight: 600; font-size: 19px; line-height: 1.2; margin: 0; text-wrap: balance; }
+.grade { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--label); border: 1.5px solid var(--label); border-radius: 3px; padding: 0 5px; }
+.site { font-size: 12px; font-weight: 600; }
+.site.Alt { color: var(--alt); } .site.Fanatics { color: var(--fan); } .site.Goldin { color: var(--warm); } .site.eBay { color: var(--hot); }
+.sub { font-size: 13px; color: var(--muted); }
+.nums { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.num { display: grid; gap: 1px; }
+.num .k { font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.num .v { font-family: var(--display); font-weight: 600; font-size: 20px; font-variant-numeric: tabular-nums; }
+.num .n { font-size: 12px; color: var(--muted); }
+.num.offer .v { color: var(--label); }
+.actions { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
+a.go { font-weight: 600; font-size: 13.5px; color: var(--ink); text-decoration: none; border-bottom: 2px solid var(--label); }
+a.go:hover { color: var(--label); }
+details { border-top: 1px dashed var(--line); }
+summary { cursor: pointer; padding: 9px 16px; font-size: 13px; font-weight: 600; color: var(--muted); list-style: none; }
+summary::-webkit-details-marker { display: none; }
+summary::before { content: "+ "; font-family: var(--mono); }
+details[open] summary::before { content: "− "; }
+.sales { overflow-x: auto; padding: 0 16px 12px; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+th { text-align: left; font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 400; padding: 4px 8px 4px 0; border-bottom: 1px solid var(--line); }
+td { padding: 6px 8px 6px 0; border-bottom: 1px solid var(--line); white-space: nowrap; }
+td a { color: var(--ink); }
+td.p { font-weight: 600; }
+.above { color: var(--hot); font-weight: 600; }
+tr.held td { color: var(--muted); text-decoration: line-through; }
+tr.held td.tag, td.tag { text-decoration: none; font-family: var(--mono); font-size: 10.5px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+footer { font-size: 12.5px; color: var(--muted); display: grid; gap: 6px; max-width: 75ch; }
+footer p { margin: 0; }
+@media (max-width: 620px) {
+  .top { grid-template-columns: 1fr; }
+  .gap { border-right: 0; border-bottom: 1px solid var(--line); grid-auto-flow: column; justify-content: start; gap: 10px; align-items: baseline; padding: 8px 16px; text-align: left; }
+  .gap .pct { font-size: 24px; }
+  .gap .vs { margin: 0; }
+  .nums { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (prefers-reduced-motion: no-preference) { .card { transition: border-color .15s; } .card:hover { border-color: var(--muted); } }
+.badge { font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; border-radius: 3px; padding: 1px 6px; }
+.badge.ok { background: var(--cool-bg); color: var(--cool); }
+.badge.no { background: var(--warm-bg); color: var(--warm); }
+.why { margin: 0; padding-left: 18px; font-size: 13px; color: var(--warm); }
+.nums.six { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.num.pay .v { color: var(--cool); }
+tr.ask td { color: var(--muted); font-style: italic; }
+.check { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--label); border-radius: 6px; padding: 12px 16px; font-size: 13.5px; }
+.check b { font-family: var(--display); font-size: 16px; }
+.check ol { margin: 6px 0 0; padding-left: 20px; display: grid; gap: 3px; }
+@media (max-width: 620px) { .nums.six { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow" id="stamp"></div>
+    <h1>Show Hit List</h1>
+    <p class="lede">Graded Pokémon cards where a live Alt, Fanatics, Goldin or eBay auction already sits above what the card has actually sold for. A card is marked <b>Solid</b> only when it passes every check below. Everything else says exactly what's missing.</p>
+  </header>
+
+  <section class="how" aria-label="What Solid means">
+    <div><b>Card Ladder sales</b>Every sale comes from Card Ladder (eBay, Fanatics, Alt, Goldin and more), matched on the slab's own label and grade. Best Offers show the price actually accepted, not the ask.</div>
+    <div><b>Fees on both sides</b>Alt and Fanatics add a 20% buyer's fee and Goldin 22%, and their sale prices include it. So each bid is shown all-in before it's compared. eBay has no buyer's fee.</div>
+    <div><b>Worst-case buy price</b>Assumes the dealer at the show asks the highest of the last 3 confirmed sales. Resale assumes the next dealer pays 85% of where this auction already sits.</div>
+    <div><b>Solid needs all of</b>At least 3 real sales in 90 days, from 2+ sites (or 5+ sales), the latest within 45 days, a gap between +20% and +100%, and at least 10% profit at the worst-case price.</div>
+  </section>
+
+  <section class="check">
+    <b>At the table, before you pay</b>
+    <ol>
+      <li>Scan the slab's cert on the PSA/CGC app. Grade, set, number and variant must match this list exactly: 1st Edition, reverse holo and Gold Star all change the card.</li>
+      <li>Pay no more than <b>Pay at most</b>. That leaves a cushion even if the auction doesn't climb any higher.</li>
+      <li>Sell after the auction closes. The finished sale is your proof, and the bid can only go up until then.</li>
+    </ol>
+  </section>
+
+  <div class="controls">
+    <div class="seg" role="group" aria-label="Show">
+      <button aria-pressed="true" data-view="solid">Solid</button>
+      <button aria-pressed="false" data-view="all">All, with reasons</button>
+    </div>
+    <div class="seg" role="group" aria-label="Site">
+      <button aria-pressed="true" data-site="all">All sites</button>
+      <button aria-pressed="false" data-site="Alt">Alt</button>
+      <button aria-pressed="false" data-site="Fanatics">Fanatics</button>
+      <button aria-pressed="false" data-site="Goldin">Goldin</button>
+      <button aria-pressed="false" data-site="eBay">eBay</button>
+    </div>
+    <label class="budget" for="budget">Budget
+      <select id="budget">
+        <option value="0">Any price</option>
+        <option value="2000">Pay at most under $2,000</option>
+        <option value="5000">Under $5,000</option>
+        <option value="10000">Under $10,000</option>
+      </select>
+    </label>
+    <span class="count" id="count"></span>
+  </div>
+
+  <div class="list" id="list"></div>
+
+  <footer>
+    <p>Sources: live bids from Alt, Fanatics, Goldin and eBay; sales from Card Ladder in US dollars (your Card Ladder app shows CAD, about 1.4× these numbers). Each sale is matched on the PSA/CGC label: same set, number, grade, 1st Edition, reverse holo and Gold Star. The two CGC Pristine cards had no Card Ladder match, so they're unverified.</p>
+    <p>A sale is held (struck through, not counted) when it's under 45% of the card's recent median, or a Buy It Now over 1.8× it. The 85% resale figure is an assumption about what a dealer pays against a fresh auction comp; change it in your head if your buyers pay less.</p>
+  </footer>
+</div>
+
+<script>
+const DATA = __DATA__;
+const fmt = n => n == null ? '—' : '$' + Math.round(n).toLocaleString('en-US');
+const short = s => s.replace(/^\d{4}\s+Pok[eé]mon\s+/i, '').replace(/^Ex /, 'EX ').replace(/’S/g, "'s");
+const year = s => (s.match(/^\d{4}/) || [''])[0];
+const endsText = iso => { const d = new Date(iso); return isNaN(d) ? '' : 'closes ' + d.toLocaleString(undefined, { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }); };
+document.getElementById('stamp').textContent = 'Bids and Card Ladder sales checked ' + DATA.checkedText;
+let view = 'solid', site = 'all';
+function render() {
+  const cap = +document.getElementById('budget').value;
+  const shown = DATA.rows.filter(r => (view === 'all' || r.solid) && (site === 'all' || r.site === site) && (!cap || (r.payMax ?? 0) <= cap));
+  document.getElementById('count').textContent = `${shown.length} shown · ${DATA.rows.filter(r => r.solid).length} solid of ${DATA.rows.length}`;
+  document.getElementById('list').innerHTML = shown.map(r => {
+    const g = r.gap, tone = !r.solid ? 't-cool' : g >= 0.5 ? 't-hot' : 't-warm';
+    return `<article class="card ${tone}">
+      <div class="top">
+        <div class="gap"><div class="pct">${g == null ? '—' : (g >= 0 ? '+' : '−') + Math.abs(Math.round(g * 100)) + '%'}</div><div class="vs">all-in bid vs sales</div></div>
+        <div class="main">
+          <div class="title"><h2>${short(r.name)}</h2><span class="grade">${r.grade}</span>${r.solid ? '<span class="badge ok">Solid</span>' : '<span class="badge no">Needs check</span>'}</div>
+          <div class="sub">${year(r.name)} · <span class="site ${r.site}">${r.site}</span> · ${r.bids} bids · ${endsText(r.ends)}</div>
+          ${r.why.length ? `<ul class="why">${r.why.map(w => `<li>${w}</li>`).join('')}</ul>` : ''}
+          <div class="nums six">
+            <div class="num"><span class="k">Bid all-in</span><span class="v">${fmt(r.allIn)}</span><span class="n">${r.fee ? fmt(r.bid) + ' + ' + Math.round(r.fee * 100) + '% fee' : 'no buyer fee'}</span></div>
+            <div class="num"><span class="k">Card Ladder price</span><span class="v">${fmt(r.clPrice)}</span><span class="n">${r.clPrice ? 'C$' + Math.round(r.clPrice * DATA.fx).toLocaleString('en-US') + ' · avg of last ' + r.clN : 'no Card Ladder sales found'}${r.lastConf ? '<br>last ' + fmt(r.lastConf.price) + ' · ' + r.lastConf.date + ' · ' + r.lastConf.house : ''}</span></div>
+            <div class="num"><span class="k">Dealer likely asks</span><span class="v">${fmt(r.dealerAsk)}</span><span class="n">top of last ${Math.min(3, r.confirmedCount)} confirmed</span></div>
+            <div class="num"><span class="k">You resell for</span><span class="v">${fmt(r.resell)}</span><span class="n">85% of bid all-in, at least</span></div>
+            <div class="num pay"><span class="k">Pay at most</span><span class="v">${fmt(r.payMax)}</span><span class="n">keeps a 10% cushion</span></div>
+            <div class="num"><span class="k">Profit at dealer ask</span><span class="v">${fmt(r.profit)}</span><span class="n">${r.confirmedCount} confirmed · ${r.sites.join(', ')}</span></div>
+          </div>
+          <div class="actions"><a class="go" href="${r.url}" target="_blank" rel="noopener">Open the ${r.site} auction ↗</a></div>
+        </div>
+      </div>
+      <details>
+        <summary>Sales (${r.sales.length})</summary>
+        <div class="sales"><table>
+          <thead><tr><th>Date</th><th>Price</th><th>Where</th><th>Type</th><th>Cert</th><th>Counts?</th><th></th></tr></thead>
+          <tbody>${r.sales.map(s => `<tr class="${s.held ? 'held' : ''}"><td>${s.date}</td><td class="p">${fmt(s.price)}</td><td>${s.house}</td><td>${s.kind === 'offer' ? 'Best Offer (accepted)' : s.kind === 'bin' ? 'Buy It Now' : 'Auction'}${s.bids ? ' · ' + s.bids + ' bids' : ''}</td><td class="tag">${s.cert || ''}</td><td class="tag">${s.held ? 'held' : '✓'}</td><td>${s.url ? `<a href="${s.url}" target="_blank" rel="noopener">View ↗</a>` : ''}</td></tr>`).join('')}</tbody>
+        </table></div>
+      </details>
+    </article>`; }).join('') || '<p class="sub">No cards match these filters.</p>';
+}
+document.querySelectorAll('.seg button').forEach(b => b.addEventListener('click', () => {
+  if (b.dataset.view) view = b.dataset.view; else site = b.dataset.site;
+  b.parentElement.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  render();
+}));
+document.getElementById('budget').addEventListener('change', render);
+render();
+</script>
