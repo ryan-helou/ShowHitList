@@ -8,6 +8,14 @@ for (const r of d.rows) {
   for (const k of ['img', 'image', 'feedSales', 'ebaySold', 'collectr', 'median', 'count', 'err', 'titleNow', 'certNow', 'bidNow', 'bidsNow', 'cl']) delete r[k];
   const l3 = r.sales.filter(s => !s.held).slice(0, 3);
   r.clN = l3.length;
+  if (r.clv?.value) { // Card Ladder Value = last sale when it is under 2 weeks old, so once this sells the sale price becomes CL Value (Alt sales are recorded with its 20% premium, Fanatics without)
+    const P = r.site === 'Alt' ? r.allIn : r.bid;
+    r.predCL = P;
+    r.stressCL = (P + l3.reduce((a, s) => a + s.price, 0)) / (l3.length + 1); // if CL only blended the new sale with the last 3
+    r.predPay = 0.9 * r.clv.value;
+    r.predProfit = 0.85 * r.predCL - r.predPay;
+    r.stressProfit = 0.85 * r.stressCL - r.predPay;
+  }
   r.clPrice = l3.length ? l3.reduce((a, s) => a + s.price, 0) / l3.length : null;
 }
 d.checkedText = new Date(d.checkedAt || Date.now()).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: 'America/Toronto' }) + ' ET';

@@ -187,6 +187,7 @@ function render() {
             <div class="num"><span class="k">Recent sales avg</span><span class="v">${fmt(r.clPrice)}</span><span class="n">${r.clPrice ? 'avg of last ' + r.clN : 'no Card Ladder sales found'}${r.lastConf ? '<br>last ' + fmt(r.lastConf.price) + ' · ' + r.lastConf.date + ' · ' + r.lastConf.house : ''}</span></div>
             <div class="num"><span class="k">Dealer likely asks</span><span class="v">${fmt(r.dealerAsk)}</span><span class="n">higher of CL Value and top recent sale</span></div>
             <div class="num"><span class="k">You resell for</span><span class="v">${fmt(r.resell)}</span><span class="n">85% of bid all-in, at least</span></div>
+            ${r.predCL ? `<div class="num"><span class="k">CL Value after this sells</span><span class="v">${fmt(r.predCL)}</span><span class="n">its sale price becomes the last sale (CL Value follows it for 2 weeks) · if you pay 90% of today's CL Value (${fmt(r.predPay)}): profit ${fmt(r.predProfit)} at 85% resale<br><b class="lowconf">stress: CL only moves to ${fmt(r.stressCL)} → profit ${fmt(r.stressProfit)}</b></span></div>` : ''}
             <div class="num pay"><span class="k">Pay at most</span><span class="v">${fmt(r.payMax)}</span><span class="n">keeps a 10% cushion</span></div>
             <div class="num"><span class="k">Profit at dealer ask</span><span class="v">${fmt(r.profit)}</span><span class="n">${r.confirmedCount} confirmed · ${r.sites.join(', ')}</span></div>
           </div>
