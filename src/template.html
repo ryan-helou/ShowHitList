@@ -91,6 +91,7 @@ footer p { margin: 0; }
 .badge.no { background: var(--warm-bg); color: var(--warm); }
 .why { margin: 0; padding-left: 18px; font-size: 13px; color: var(--warm); }
 .nums.six { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.mixed { margin: 6px 0; font-size: 12px; color: var(--warm); font-weight: 600; }
 .lowconf { color: var(--warm); font-weight: 600; }
 .num.pay .v { color: var(--cool); }
 tr.ask td { color: var(--muted); font-style: italic; }
@@ -151,7 +152,7 @@ tr.ask td { color: var(--muted); font-style: italic; }
   <div class="list" id="list"></div>
 
   <footer>
-    <p>Sources: live bids from Alt, Fanatics, Goldin and eBay; sales from Card Ladder in US dollars, with the Canadian-dollar amount beside every price (1 US$ = 1.40 C$). Each sale is matched on the PSA/CGC label: same set, number, grade, 1st Edition, reverse holo and Gold Star. The two CGC Pristine cards had no Card Ladder match, so they're unverified.</p>
+    <p>Sources: live bids from Alt, Fanatics, Goldin and eBay; sales from Card Ladder in US dollars (Alt sales already include Alt's 20% premium; Fanatics sales do not), with the Canadian-dollar amount beside every price (1 US$ = 1.40 C$). Each sale is matched on the PSA/CGC label: same set, number, grade, 1st Edition, reverse holo and Gold Star. The two CGC Pristine cards had no Card Ladder match, so they're unverified.</p>
     <p>A sale is held (struck through, not counted) when it's under 45% of the card's recent median, or a Buy It Now over 1.8× it. The 85% resale figure is an assumption about what a dealer pays against a fresh auction comp; change it in your head if your buyers pay less.</p>
   </footer>
 </div>
@@ -178,6 +179,7 @@ function render() {
         <div class="main">
           <div class="title"><h2>${short(r.name)}</h2><span class="grade">${r.grade}</span>${r.solid ? '<span class="badge ok">Solid</span>' : '<span class="badge no">Needs check</span>'}</div>
           <div class="sub">${year(r.name)} · <span class="site ${r.site}">${r.site}</span> · ${r.bids} bids · ${endsText(r.ends)}</div>
+          ${r.mixed ? `<p class="mixed">⚠ Card Ladder mixes variants in these sales (${r.mixed.join(' / ')}): check the slab against the sales before trusting this price.</p>` : ''}
           ${r.why.length ? `<ul class="why">${r.why.map(w => `<li>${w}</li>`).join('')}</ul>` : ''}
           <div class="nums six">
             <div class="num"><span class="k">Bid all-in</span><span class="v">${fmt(r.allIn)}</span><span class="n">${r.fee ? fmt(r.bid) + ' + ' + Math.round(r.fee * 100) + '% fee' : 'no buyer fee'}</span></div>
