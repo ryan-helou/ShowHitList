@@ -4,6 +4,8 @@
 
 **A private, one-page list of graded Pokémon cards worth looking for at a card show.**
 
+<!-- facts --><img alt="Cards: graded Pokémon" src="https://img.shields.io/badge/Cards-graded_Pok%C3%A9mon-24292f?style=for-the-badge"> <img alt="Watches: 4 auction sites" src="https://img.shields.io/badge/Watches-4_auction_sites-24292f?style=for-the-badge"> <img alt="Prices from: Card Ladder" src="https://img.shields.io/badge/Prices_from-Card_Ladder-24292f?style=for-the-badge">
+
 </div>
 
 <br>
