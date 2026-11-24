@@ -10,7 +10,7 @@
 
 <br>
 
-Collectible card prices are tracked by sites like Card Ladder, which record what each card has recently sold for. Sometimes a card is up for auction online (on Alt, Fanatics, Goldin or eBay) and the bidding is already higher than its recent sales. That card's recorded value will likely go up once the auction ends. This page lists those cards, so its owner can try to buy one at a card show at today's price before that happens. The page is rebuilt from data gathered separately; the gathering itself isn't part of this repo.
+Collectible card prices are tracked by sites like Card Ladder, which record what each card has recently sold for. Sometimes a card is up for auction online (on Alt, Fanatics, Goldin or eBay) and the bidding is already higher than its recent sales. That card's recorded value will likely go up once the auction ends. This page lists those cards, so I can try to buy one at a card show at today's price before that happens. The page is rebuilt from data gathered separately; the gathering itself isn't part of this repo.
 
 ## What you can do with it
 
